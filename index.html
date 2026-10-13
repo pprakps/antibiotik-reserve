@@ -4,18 +4,20 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Formulir Permintaan Antibiotik Reserve (PPRA)</title>
-  <!-- Menambahkan FontAwesome untuk ikon loading spinner -->
+  <!-- Menambahkan FontAwesome untuk ikon -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
   
   <style>
     :root {
-      --primary: #0d6efd;
+      --primary: #0056b3;      /* Biru tua / utama */
+      --primary-hover: #004494;
+      --secondary: #0d6efd;    /* Biru standar */
+      --bg-color: #e6f2ff;     /* Biru sangat muda untuk background */
       --success: #198754;
       --danger: #dc3545;
       --warning: #ffc107;
       --info: #0dcaf0;
       --text-muted: #6c757d;
-      --bg-color: #f8f9fa;
     }
 
     body {
@@ -30,13 +32,34 @@
       max-width: 900px;
       margin: 0 auto;
       background: #fff;
-      padding: 30px;
       border-radius: 8px;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      overflow: hidden; /* Agar sudut header melengkung mengikuti container */
     }
 
-    h2, h3 {
+    /* Banner Judul Form Biru di Atas */
+    .header-banner {
+      background-color: var(--primary);
+      color: white;
+      padding: 25px 20px;
       text-align: center;
+    }
+    .header-banner h2 {
+      margin: 0;
+      font-size: 24px;
+      color: white;
+    }
+    .header-banner p {
+      margin: 5px 0 0 0;
+      font-size: 14px;
+      color: #cce5ff;
+    }
+
+    .form-body {
+      padding: 30px;
+    }
+
+    h3 {
       color: var(--primary);
     }
 
@@ -48,15 +71,22 @@
       display: block;
       font-weight: bold;
       margin-bottom: 5px;
+      color: #003366; /* Biru sangat gelap untuk teks label */
     }
 
     input[type="text"], select, textarea, input[type="file"] {
       width: 100%;
       padding: 10px;
-      border: 1px solid #ccc;
+      border: 1px solid #b3d7ff;
       border-radius: 4px;
       box-sizing: border-box;
       font-family: inherit;
+    }
+    
+    input[type="text"]:focus, select:focus, textarea:focus {
+      outline: none;
+      border-color: var(--primary);
+      box-shadow: 0 0 5px rgba(0, 86, 179, 0.3);
     }
 
     textarea {
@@ -64,7 +94,7 @@
       height: 80px;
     }
 
-    button {
+    button.btn-submit {
       width: 100%;
       padding: 12px;
       background-color: var(--primary);
@@ -79,18 +109,55 @@
       align-items: center;
       gap: 10px;
       margin-top: 20px;
+      transition: background 0.3s;
     }
 
-    button:disabled {
-      background-color: #a0c4ff;
+    button.btn-submit:hover {
+      background-color: var(--primary-hover);
+    }
+
+    button.btn-submit:disabled {
+      background-color: #99c2ff;
       cursor: not-allowed;
     }
 
     hr {
       border: 0;
       height: 1px;
-      background: #eee;
+      background: #cce5ff;
       margin: 40px 0;
+    }
+
+    /* Bagian Status & Tombol Refresh */
+    .status-header-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 15px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .status-header-container h3 {
+      margin: 0;
+    }
+
+    button.btn-refresh {
+      background-color: var(--secondary);
+      color: white;
+      border: none;
+      padding: 8px 15px;
+      border-radius: 4px;
+      font-size: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      transition: background 0.3s;
+    }
+
+    button.btn-refresh:hover {
+      background-color: #0b5ed7;
     }
 
     /* Gaya Tabel */
@@ -101,19 +168,22 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      margin-top: 15px;
       font-size: 14px;
     }
 
     th, td {
-      border: 1px solid #ddd;
+      border: 1px solid #cce5ff;
       padding: 12px;
       text-align: left;
     }
 
     th {
-      background-color: var(--primary);
+      background-color: var(--secondary);
       color: white;
+    }
+    
+    tr:nth-child(even) {
+      background-color: #f8fbff;
     }
 
     /* Gaya Badge Status */
@@ -137,82 +207,96 @@
 <body>
 
   <div class="container">
-    <h2>Formulir Permintaan Antibiotik Reserve</h2>
-    <p style="text-align: center; color: var(--text-muted); margin-bottom: 30px;">
-      Isi formulir di bawah ini untuk mengajukan permintaan ke Tim PGA
-    </p>
-
-    <!-- FORMULIR INPUT -->
-    <form id="ppraForm">
-      <div class="form-group">
-        <label>Nama Pasien</label>
-        <input type="text" id="Nama_Pasien" placeholder="Masukkan nama pasien" required>
-      </div>
-      <div class="form-group">
-        <label>No. Rekam Medis (RM)</label>
-        <input type="text" id="No_RM" placeholder="Contoh: 123456" required>
-      </div>
-      <div class="form-group">
-        <label>Nama DPJP</label>
-        <input type="text" id="Nama_DPJP" placeholder="Masukkan nama Dokter Penanggung Jawab" required>
-      </div>
-      <div class="form-group">
-        <label>Diagnosa Klinis</label>
-        <input type="text" id="Diagnosa" placeholder="Masukkan diagnosa" required>
-      </div>
-      <div class="form-group">
-        <label>Antibiotik</label>
-        <select id="Antibiotik" required>
-          <option value="" disabled selected>-- Pilih Antibiotik --</option>
-          <option value="Meropenem (IV)">Meropenem (IV)</option>
-          <option value="Seftazidim (IV)">Seftazidim (IV)</option>
-        </select>
-      </div>
-      <div class="form-group">
-        <label>Regimen / Dosis</label>
-        <input type="text" id="Regimen_Dosis" placeholder="Contoh: 3 x 1 Gram" required>
-      </div>
-      <div class="form-group">
-        <label>Indikasi</label>
-        <input type="text" id="Indikasi" placeholder="Masukkan indikasi penggunaan" required>
-      </div>
-      <div class="form-group">
-        <label>Alasan Penggunaan</label>
-        <textarea id="Alasan" placeholder="Jelaskan alasan memilih antibiotik ini..." required></textarea>
-      </div>
-      <div class="form-group">
-        <label>Lampiran Foto Kultur / Bukti Pendukung (Maksimal 5MB)</label>
-        <input type="file" id="Foto_Kultur" accept="image/*">
-      </div>
-
-      <button type="submit" id="btnSubmit">
-        <span id="btnText">Kirim Permintaan ke Dasbor PGA</span>
-        <i id="loadingSpinner" class="fa-solid fa-spinner fa-spin" style="display: none;"></i>
-      </button>
-    </form>
-
-    <hr>
-
-    <!-- TABEL STATUS -->
-    <h3>Status Antrean Permintaan</h3>
-    <div class="table-responsive">
-      <table>
-        <thead>
-          <tr>
-            <th>Pasien / RM</th>
-            <th>Diagnosa</th>
-            <th>Antibiotik / Dosis</th>
-            <th>Indikasi</th>
-            <th>Status</th>
-            <th>Catatan PGA</th>
-          </tr>
-        </thead>
-        <tbody id="tabelStatus">
-          <!-- Data akan dimuat di sini oleh JavaScript -->
-        </tbody>
-      </table>
+    <!-- BANNER BIRU DI ATAS -->
+    <div class="header-banner">
+      <h2>Formulir Permintaan Antibiotik Reserve</h2>
+      <p>Program Pengendalian Resistensi Antimikroba (PPRA)</p>
     </div>
-  </div>
+
+    <!-- ISI FORMULIR -->
+    <div class="form-body">
+      <form id="ppraForm">
+        <div class="form-group">
+          <label>Nama Pasien</label>
+          <input type="text" id="Nama_Pasien" placeholder="Masukkan nama pasien" required>
+        </div>
+        <div class="form-group">
+          <label>No. Rekam Medis (RM)</label>
+          <input type="text" id="No_RM" placeholder="Contoh: 123456" required>
+        </div>
+        <div class="form-group">
+          <label>Nama DPJP</label>
+          <input type="text" id="Nama_DPJP" placeholder="Masukkan nama Dokter Penanggung Jawab" required>
+        </div>
+        <div class="form-group">
+          <label>Diagnosa Klinis</label>
+          <input type="text" id="Diagnosa" placeholder="Masukkan diagnosa klinis" required>
+        </div>
+        <div class="form-group">
+          <label>Antibiotik</label>
+          <select id="Antibiotik" required>
+            <option value="" disabled selected>-- Pilih Antibiotik --</option>
+            <option value="Meropenem (IV)">Meropenem (IV)</option>
+            <option value="Seftazidim (IV)">Seftazidim (IV)</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Regimen / Dosis</label>
+          <input type="text" id="Regimen_Dosis" placeholder="Contoh: 3 x 1 Gram" required>
+        </div>
+        <div class="form-group">
+          <label>Indikasi</label>
+          <select id="Indikasi" required>
+            <option value="" disabled selected>-- Pilih Indikasi --</option>
+            <option value="Profilaksis">Profilaksis</option>
+            <option value="Empiris">Empiris</option>
+            <option value="Definitif">Definitif</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>Alasan Penggunaan</label>
+          <textarea id="Alasan" placeholder="Jelaskan alasan memilih antibiotik ini..." required></textarea>
+        </div>
+        <div class="form-group">
+          <label>Lampiran Foto Kultur / Bukti Pendukung (Maksimal 5MB)</label>
+          <input type="file" id="Foto_Kultur" accept="image/*">
+        </div>
+
+        <button type="submit" id="btnSubmit" class="btn-submit">
+          <span id="btnText">Kirim Permintaan ke Dasbor PGA</span>
+          <i id="loadingSpinner" class="fa-solid fa-spinner fa-spin" style="display: none;"></i>
+        </button>
+      </form>
+
+      <hr>
+
+      <!-- TABEL STATUS DENGAN TOMBOL REFRESH -->
+      <div class="status-header-container">
+        <h3>Status Antrean Permintaan</h3>
+        <button type="button" class="btn-refresh" onclick="muatStatus()">
+          <i class="fa-solid fa-rotate-right"></i> Refresh Data
+        </button>
+      </div>
+      
+      <div class="table-responsive">
+        <table>
+          <thead>
+            <tr>
+              <th>Pasien / RM</th>
+              <th>Diagnosa</th>
+              <th>Antibiotik / Dosis</th>
+              <th>Indikasi</th>
+              <th>Status</th>
+              <th>Catatan PGA</th>
+            </tr>
+          </thead>
+          <tbody id="tabelStatus">
+            <!-- Data akan dimuat di sini oleh JavaScript -->
+          </tbody>
+        </table>
+      </div>
+    </div> <!-- End form-body -->
+  </div> <!-- End container -->
 
   <!-- KODE JAVASCRIPT -->
   <script>
@@ -231,7 +315,7 @@
       
       btn.disabled = true;
       btnText.innerText = "Mengirim Data & File...";
-      spinner.style.display = "block";
+      spinner.style.display = "inline-block";
 
       const fileInput = document.getElementById("Foto_Kultur");
       
@@ -256,7 +340,7 @@
           alert("Pemberitahuan: Permintaan resep antibiotik reserve berhasil dikirim ke Dasbor Tim PGA.");
           document.getElementById("ppraForm").reset();
           resetTombolKirim();
-          setTimeout(muatStatus, 2000); // Tunggu 2 detik lalu refresh tabel
+          setTimeout(muatStatus, 2000); // Tunggu 2 detik lalu refresh tabel otomatis
         })
         .catch(error => {
           console.error("Error:", error);
@@ -268,7 +352,6 @@
       if (fileInput.files.length > 0) {
         const file = fileInput.files[0];
         
-        // Cek ukuran file (Maks 5MB)
         if(file.size > 5 * 1024 * 1024) {
             alert("Ukuran file foto terlalu besar. Maksimal 5MB.");
             resetTombolKirim();
@@ -281,7 +364,6 @@
         };
         reader.readAsDataURL(file);
       } else {
-        // Jika form dikirim tanpa foto
         kirimData("", "Tidak ada file");
       }
     });
@@ -298,7 +380,7 @@
     // ---------------------------------------------------------
     function muatStatus() {
       const tbody = document.getElementById("tabelStatus");
-      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 24px; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Sinkronisasi data antrean...</td></tr>';
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 24px; color: var(--primary);"><i class="fa-solid fa-spinner fa-spin"></i> Sedang memuat data antrean terbaru...</td></tr>';
 
       fetch(WEB_APP_URL)
         .then(response => response.json())
@@ -310,7 +392,6 @@
             return;
           }
           
-          // Loop data secara mundur agar baris terbaru di Google Sheets muncul paling atas
           for (let i = data.length - 1; i >= 0; i--) {
             const row = data[i];
             

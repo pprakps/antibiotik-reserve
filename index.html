@@ -1,0 +1,361 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Formulir Permintaan Antibiotik Reserve (PPRA)</title>
+  <!-- Menambahkan FontAwesome untuk ikon loading spinner -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --primary: #0d6efd;
+      --success: #198754;
+      --danger: #dc3545;
+      --warning: #ffc107;
+      --info: #0dcaf0;
+      --text-muted: #6c757d;
+      --bg-color: #f8f9fa;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background-color: var(--bg-color);
+      margin: 0;
+      padding: 20px;
+      color: #333;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      background: #fff;
+      padding: 30px;
+      border-radius: 8px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    }
+
+    h2, h3 {
+      text-align: center;
+      color: var(--primary);
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      font-weight: bold;
+      margin-bottom: 5px;
+    }
+
+    input[type="text"], select, textarea, input[type="file"] {
+      width: 100%;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 4px;
+      box-sizing: border-box;
+      font-family: inherit;
+    }
+
+    textarea {
+      resize: vertical;
+      height: 80px;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      border-radius: 4px;
+      font-size: 16px;
+      font-weight: bold;
+      cursor: pointer;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    button:disabled {
+      background-color: #a0c4ff;
+      cursor: not-allowed;
+    }
+
+    hr {
+      border: 0;
+      height: 1px;
+      background: #eee;
+      margin: 40px 0;
+    }
+
+    /* Gaya Tabel */
+    .table-responsive {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 15px;
+      font-size: 14px;
+    }
+
+    th, td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: left;
+    }
+
+    th {
+      background-color: var(--primary);
+      color: white;
+    }
+
+    /* Gaya Badge Status */
+    .badge {
+      padding: 5px 10px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: bold;
+      color: white;
+      display: inline-block;
+      text-align: center;
+    }
+    .badge-menunggu { background-color: var(--text-muted); }
+    .badge-disetujui { background-color: var(--success); }
+    .badge-ditolak { background-color: var(--danger); }
+    .badge-ditunda { background-color: var(--warning); color: #000; }
+    .badge-catatan { background-color: var(--info); color: #000; }
+
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Formulir Permintaan Antibiotik Reserve</h2>
+    <p style="text-align: center; color: var(--text-muted); margin-bottom: 30px;">
+      Isi formulir di bawah ini untuk mengajukan permintaan ke Tim PGA
+    </p>
+
+    <!-- FORMULIR INPUT -->
+    <form id="ppraForm">
+      <div class="form-group">
+        <label>Nama Pasien</label>
+        <input type="text" id="Nama_Pasien" placeholder="Masukkan nama pasien" required>
+      </div>
+      <div class="form-group">
+        <label>No. Rekam Medis (RM)</label>
+        <input type="text" id="No_RM" placeholder="Contoh: 123456" required>
+      </div>
+      <div class="form-group">
+        <label>Nama DPJP</label>
+        <input type="text" id="Nama_DPJP" placeholder="Masukkan nama Dokter Penanggung Jawab" required>
+      </div>
+      <div class="form-group">
+        <label>Diagnosa Klinis</label>
+        <input type="text" id="Diagnosa" placeholder="Masukkan diagnosa" required>
+      </div>
+      <div class="form-group">
+        <label>Antibiotik</label>
+        <select id="Antibiotik" required>
+          <option value="" disabled selected>-- Pilih Antibiotik --</option>
+          <option value="Meropenem (IV)">Meropenem (IV)</option>
+          <option value="Seftazidim (IV)">Seftazidim (IV)</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>Regimen / Dosis</label>
+        <input type="text" id="Regimen_Dosis" placeholder="Contoh: 3 x 1 Gram" required>
+      </div>
+      <div class="form-group">
+        <label>Indikasi</label>
+        <input type="text" id="Indikasi" placeholder="Masukkan indikasi penggunaan" required>
+      </div>
+      <div class="form-group">
+        <label>Alasan Penggunaan</label>
+        <textarea id="Alasan" placeholder="Jelaskan alasan memilih antibiotik ini..." required></textarea>
+      </div>
+      <div class="form-group">
+        <label>Lampiran Foto Kultur / Bukti Pendukung (Maksimal 5MB)</label>
+        <input type="file" id="Foto_Kultur" accept="image/*">
+      </div>
+
+      <button type="submit" id="btnSubmit">
+        <span id="btnText">Kirim Permintaan ke Dasbor PGA</span>
+        <i id="loadingSpinner" class="fa-solid fa-spinner fa-spin" style="display: none;"></i>
+      </button>
+    </form>
+
+    <hr>
+
+    <!-- TABEL STATUS -->
+    <h3>Status Antrean Permintaan</h3>
+    <div class="table-responsive">
+      <table>
+        <thead>
+          <tr>
+            <th>Pasien / RM</th>
+            <th>Diagnosa</th>
+            <th>Antibiotik / Dosis</th>
+            <th>Indikasi</th>
+            <th>Status</th>
+            <th>Catatan PGA</th>
+          </tr>
+        </thead>
+        <tbody id="tabelStatus">
+          <!-- Data akan dimuat di sini oleh JavaScript -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- KODE JAVASCRIPT -->
+  <script>
+    // ⚠️ GANTI TEKS DI BAWAH INI DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzOSlGzNRbcwPkGLJ67vihPWRd8APK66X4wTmz1NA7kqPkWoRM16kwEYCrP6QrA84Un/exec"; 
+
+    // ---------------------------------------------------------
+    // FUNGSI 1: MENGIRIM DATA FORMULIR
+    // ---------------------------------------------------------
+    document.getElementById("ppraForm").addEventListener("submit", function(e) {
+      e.preventDefault();
+      
+      const btn = document.getElementById("btnSubmit");
+      const btnText = document.getElementById("btnText");
+      const spinner = document.getElementById("loadingSpinner");
+      
+      btn.disabled = true;
+      btnText.innerText = "Mengirim Data & File...";
+      spinner.style.display = "block";
+
+      const fileInput = document.getElementById("Foto_Kultur");
+      
+      const kirimData = (base64Data, fileName) => {
+        const formData = new URLSearchParams();
+        formData.append("Nama_Pasien", document.getElementById("Nama_Pasien").value);
+        formData.append("No_RM", document.getElementById("No_RM").value);
+        formData.append("Nama_DPJP", document.getElementById("Nama_DPJP").value);
+        formData.append("Diagnosa", document.getElementById("Diagnosa").value);
+        formData.append("Antibiotik", document.getElementById("Antibiotik").value);
+        formData.append("Regimen_Dosis", document.getElementById("Regimen_Dosis").value);
+        formData.append("Indikasi", document.getElementById("Indikasi").value);
+        formData.append("Alasan", document.getElementById("Alasan").value);
+        formData.append("fileBase64", base64Data || "");
+        formData.append("fileName", fileName || "");
+
+        fetch(WEB_APP_URL, {
+          method: "POST",
+          body: formData
+        })
+        .then(() => {
+          alert("Pemberitahuan: Permintaan resep antibiotik reserve berhasil dikirim ke Dasbor Tim PGA.");
+          document.getElementById("ppraForm").reset();
+          resetTombolKirim();
+          setTimeout(muatStatus, 2000); // Tunggu 2 detik lalu refresh tabel
+        })
+        .catch(error => {
+          console.error("Error:", error);
+          alert("Gagal terhubung ke server. Pastikan URL Web App valid.");
+          resetTombolKirim();
+        });
+      };
+
+      if (fileInput.files.length > 0) {
+        const file = fileInput.files[0];
+        
+        // Cek ukuran file (Maks 5MB)
+        if(file.size > 5 * 1024 * 1024) {
+            alert("Ukuran file foto terlalu besar. Maksimal 5MB.");
+            resetTombolKirim();
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          kirimData(event.target.result, file.name);
+        };
+        reader.readAsDataURL(file);
+      } else {
+        // Jika form dikirim tanpa foto
+        kirimData("", "Tidak ada file");
+      }
+    });
+
+    function resetTombolKirim() {
+      const btn = document.getElementById("btnSubmit");
+      document.getElementById("btnText").innerText = "Kirim Permintaan ke Dasbor PGA";
+      document.getElementById("loadingSpinner").style.display = "none";
+      btn.disabled = false;
+    }
+
+    // ---------------------------------------------------------
+    // FUNGSI 2: MEMUAT DATA KE DALAM TABEL STATUS
+    // ---------------------------------------------------------
+    function muatStatus() {
+      const tbody = document.getElementById("tabelStatus");
+      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 24px; color: var(--text-muted);"><i class="fa-solid fa-spinner fa-spin"></i> Sinkronisasi data antrean...</td></tr>';
+
+      fetch(WEB_APP_URL)
+        .then(response => response.json())
+        .then(data => {
+          tbody.innerHTML = "";
+          
+          if(data.length === 0) {
+            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 24px; color: var(--text-muted);">Belum ada antrean permintaan antibiotik reserve saat ini.</td></tr>';
+            return;
+          }
+          
+          // Loop data secara mundur agar baris terbaru di Google Sheets muncul paling atas
+          for (let i = data.length - 1; i >= 0; i--) {
+            const row = data[i];
+            
+            let badgeClass = "badge-menunggu";
+            let statusTeks = row.Status ? row.Status.toUpperCase() : "MENUNGGU REVIEW";
+            
+            if (statusTeks.includes("DISETUJUI") && statusTeks.includes("CATATAN")) {
+              badgeClass = "badge-catatan";
+            } else if (statusTeks === "DISETUJUI") {
+              badgeClass = "badge-disetujui";
+            } else if (statusTeks === "DITOLAK") {
+              badgeClass = "badge-ditolak";
+            } else if (statusTeks === "DITUNDA") {
+              badgeClass = "badge-ditunda";
+            }
+
+            let catatan = row.Catatan && row.Catatan.trim() !== "" ? row.Catatan : "<em>Belum ada catatan PGA.</em>";
+
+            tbody.innerHTML += `
+              <tr>
+                <td>
+                  <strong>${row.Nama_Pasien || "-"}</strong><br>
+                  <span style="font-size: 12px; color: var(--text-muted);">RM: ${row.No_RM || "-"}</span>
+                </td>
+                <td>${row.Diagnosa || "-"}</td>
+                <td>
+                  <strong>${row.Antibiotik || "-"}</strong><br>
+                  <span style="font-size: 12px; color: var(--text-muted);">${row.Regimen_Dosis || "-"}</span>
+                </td>
+                <td>${row.Indikasi || "-"}</td>
+                <td><span class="badge ${badgeClass}">${statusTeks}</span></td>
+                <td style="font-size: 13px;">${catatan}</td>
+              </tr>
+            `;
+          }
+        })
+        .catch(error => {
+          console.error("Error Fetch:", error);
+          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 24px; color: var(--danger);"><i class="fa-solid fa-triangle-exclamation"></i> Gagal memuat data antrean. Pastikan URL Web App valid.</td></tr>';
+        });
+    }
+
+    // Panggil fungsi muat tabel otomatis saat web pertama kali dibuka
+    window.addEventListener('DOMContentLoaded', muatStatus);
+  </script>
+
+</body>
+</html>

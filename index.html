@@ -224,7 +224,7 @@
           <label>No. Rekam Medis (RM)</label>
           <input type="text" id="No_RM" placeholder="Contoh: 123456" required>
         </div>
-        <div class="form-group mb-3"> <!-- Sesuaikan class CSS dengan template Anda -->
+        <div class="form-group mb-3">
           <label for="ruangan">Ruangan</label>
           <select id="ruangan" name="Ruangan" class="form-control" required>
             <option value="" disabled selected>Pilih Ruangan...</option>
@@ -301,6 +301,7 @@
             <tr>
               <th>Pasien / RM / DPJP</th>
               <th>Diagnosa</th>
+              <th>Ruangan</th>
               <th>Antibiotik / Dosis</th>
               <th>Indikasi</th>
               <th>Status</th>
@@ -340,6 +341,7 @@
         const formData = new URLSearchParams();
         formData.append("Nama_Pasien", document.getElementById("Nama_Pasien").value);
         formData.append("No_RM", document.getElementById("No_RM").value);
+        formData.append("Ruangan", document.getElementById("ruangan").value); // BARIS BARU DITAMBAHKAN
         formData.append("Nama_DPJP", document.getElementById("Nama_DPJP").value);
         formData.append("Diagnosa", document.getElementById("Diagnosa").value);
         formData.append("Antibiotik", document.getElementById("Antibiotik").value);
@@ -397,7 +399,8 @@
     // ---------------------------------------------------------
     function muatStatus() {
       const tbody = document.getElementById("tabelStatus");
-      tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 24px; color: var(--primary);"><i class="fa-solid fa-spinner fa-spin"></i> Sedang memuat data antrean terbaru...</td></tr>';
+      // colspan diubah dari 6 menjadi 7 agar rapi
+      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 24px; color: var(--primary);"><i class="fa-solid fa-spinner fa-spin"></i> Sedang memuat data antrean terbaru...</td></tr>';
 
       fetch(WEB_APP_URL)
         .then(response => response.json())
@@ -405,7 +408,8 @@
           tbody.innerHTML = "";
           
           if(data.length === 0) {
-            tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 24px; color: var(--text-muted);">Belum ada antrean permintaan antibiotik reserve saat ini.</td></tr>';
+            // colspan diubah dari 6 menjadi 7 agar rapi
+            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 24px; color: var(--text-muted);">Belum ada antrean permintaan antibiotik reserve saat ini.</td></tr>';
             return;
           }
           
@@ -435,6 +439,7 @@
                   <span style="font-size: 12px; color: #0056b3;">DPJP: <strong>${row.Nama_DPJP || "-"}</strong></span>
                 </td>
                 <td>${row.Diagnosa || "-"}</td>
+                <td><span style="font-weight: bold; color: var(--primary);">${row.Ruangan || "-"}</span></td> <!-- BARIS BARU DITAMBAHKAN -->
                 <td>
                   <strong>${row.Antibiotik || "-"}</strong><br>
                   <span style="font-size: 12px; color: var(--text-muted);">${row.Regimen_Dosis || "-"}</span>
@@ -448,7 +453,8 @@
         })
         .catch(error => {
           console.error("Error Fetch:", error);
-          tbody.innerHTML = '<tr><td colspan="6" style="text-align:center; padding: 24px; color: var(--danger);"><i class="fa-solid fa-triangle-exclamation"></i> Gagal memuat data antrean. Pastikan URL Web App valid.</td></tr>';
+          // colspan diubah dari 6 menjadi 7 agar rapi
+          tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 24px; color: var(--danger);"><i class="fa-solid fa-triangle-exclamation"></i> Gagal memuat data antrean. Pastikan URL Web App valid.</td></tr>';
         });
     }
 

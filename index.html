@@ -224,6 +224,23 @@
           <label>No. Rekam Medis (RM)</label>
           <input type="text" id="No_RM" placeholder="Contoh: 123456" required>
         </div>
+        <div class="form-group mb-3"> <!-- Sesuaikan class CSS dengan template Anda -->
+          <label for="ruangan">Ruangan</label>
+          <select id="ruangan" name="Ruangan" class="form-control" required>
+            <option value="" disabled selected>Pilih Ruangan...</option>
+            <option value="Anggrek">Anggrek</option>
+            <option value="Cempaka">Cempaka</option>
+            <option value="Dahlia">Dahlia</option>
+            <option value="ICU">ICU</option>
+            <option value="Isolasi Tanjung">Isolasi Tanjung</option>
+            <option value="Kenanga">Kenanga</option>
+            <option value="Mawar">Mawar</option>
+            <option value="Melati/VIP">Melati/VIP</option>
+            <option value="Perinatologi">Perinatologi</option>
+            <option value="Teratai">Teratai</option>
+            <option value="VK">VK</option>
+          </select>
+        </div>
         <div class="form-group">
           <label>Nama DPJP</label>
           <input type="text" id="Nama_DPJP" placeholder="Masukkan nama Dokter Penanggung Jawab" required>
@@ -301,7 +318,7 @@
   <!-- KODE JAVASCRIPT -->
   <script>
     // ⚠️ GANTI TEKS DI BAWAH INI DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzruAd85gwnOgj4TDwGoigTze7pTSsaQATn5ijs-zMidf1Edo5Opu3otaeuJ2IJ6Gfz/exec"; 
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzI3IcfTjDLUTI1W1Ie88ATipv3jYehLSHpq_5t2AIj9Ji7I0vdx7tjreFHQFHp144j/exec"; 
 
     // ---------------------------------------------------------
     // FUNGSI 1: MENGIRIM DATA FORMULIR

@@ -9,10 +9,10 @@
   
   <style>
     :root {
-      --primary: #0056b3;      /* Biru tua / utama */
+      --primary: #0056b3;      
       --primary-hover: #004494;
-      --secondary: #0d6efd;    /* Biru standar */
-      --bg-color: #e6f2ff;     /* Biru sangat muda untuk background */
+      --secondary: #0d6efd;    
+      --bg-color: #e6f2ff;     
       --success: #198754;
       --danger: #dc3545;
       --warning: #ffc107;
@@ -29,15 +29,14 @@
     }
 
     .container {
-      max-width: 900px;
+      max-width: 950px; /* Diperlebar sedikit agar tabel muat */
       margin: 0 auto;
       background: #fff;
       border-radius: 8px;
       box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-      overflow: hidden; /* Agar sudut header melengkung mengikuti container */
+      overflow: hidden; 
     }
 
-    /* Banner Judul Form Biru di Atas */
     .header-banner {
       background-color: var(--primary);
       color: white;
@@ -71,7 +70,7 @@
       display: block;
       font-weight: bold;
       margin-bottom: 5px;
-      color: #003366; /* Biru sangat gelap untuk teks label */
+      color: #003366; 
     }
 
     input[type="text"], select, textarea, input[type="file"] {
@@ -128,7 +127,6 @@
       margin: 40px 0;
     }
 
-    /* Bagian Status & Tombol Refresh */
     .status-header-container {
       display: flex;
       justify-content: space-between;
@@ -160,7 +158,6 @@
       background-color: #0b5ed7;
     }
 
-    /* Gaya Tabel */
     .table-responsive {
       overflow-x: auto;
     }
@@ -168,13 +165,14 @@
     table {
       width: 100%;
       border-collapse: collapse;
-      font-size: 14px;
+      font-size: 13px; /* Dikecilkan sedikit agar lebih lega */
     }
 
     th, td {
       border: 1px solid #cce5ff;
-      padding: 12px;
+      padding: 10px;
       text-align: left;
+      vertical-align: top; /* Agar teks rapi di atas jika ada yang panjang */
     }
 
     th {
@@ -186,11 +184,10 @@
       background-color: #f8fbff;
     }
 
-    /* Gaya Badge Status */
     .badge {
       padding: 5px 10px;
       border-radius: 20px;
-      font-size: 12px;
+      font-size: 11px;
       font-weight: bold;
       color: white;
       display: inline-block;
@@ -207,13 +204,11 @@
 <body>
 
   <div class="container">
-    <!-- BANNER BIRU DI ATAS -->
     <div class="header-banner">
       <h2>Formulir Permintaan Antibiotik Reserve</h2>
       <p>Program Pengendalian Resistensi Antimikroba (PPRA)</p>
     </div>
 
-    <!-- ISI FORMULIR -->
     <div class="form-body">
       <form id="ppraForm">
         <div class="form-group">
@@ -287,7 +282,6 @@
 
       <hr>
 
-      <!-- TABEL STATUS DENGAN TOMBOL REFRESH -->
       <div class="status-header-container">
         <h3>Status Antrean Permintaan</h3>
         <button type="button" class="btn-refresh" onclick="muatStatus()">
@@ -304,26 +298,23 @@
               <th>Ruangan</th>
               <th>Antibiotik / Dosis</th>
               <th>Indikasi</th>
+              <th>Alasan</th> <!-- HEADER ALASAN DITAMBAHKAN -->
               <th>Status</th>
               <th>Catatan PGA</th>
             </tr>
           </thead>
           <tbody id="tabelStatus">
-            <!-- Data akan dimuat di sini oleh JavaScript -->
+            <!-- Data dimuat JavaScript -->
           </tbody>
         </table>
       </div>
-    </div> <!-- End form-body -->
-  </div> <!-- End container -->
+    </div> 
+  </div>
 
-  <!-- KODE JAVASCRIPT -->
   <script>
-    // ⚠️ GANTI TEKS DI BAWAH INI DENGAN URL WEB APP GOOGLE APPS SCRIPT ANDA
-    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbzI3IcfTjDLUTI1W1Ie88ATipv3jYehLSHpq_5t2AIj9Ji7I0vdx7tjreFHQFHp144j/exec"; 
+    // ⚠️ JANGAN LUPA UPDATE URL INI JIKA ANDA MELAKUKAN "NEW DEPLOYMENT" DI APPS SCRIPT
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz6RBU2k6qLmHvOLNa6KWJz4cugWRoAjJb-jmuqvrSp4QFr97bs4XUA1TYh0ZSI5Wqz/exec"; 
 
-    // ---------------------------------------------------------
-    // FUNGSI 1: MENGIRIM DATA FORMULIR
-    // ---------------------------------------------------------
     document.getElementById("ppraForm").addEventListener("submit", function(e) {
       e.preventDefault();
       
@@ -341,7 +332,7 @@
         const formData = new URLSearchParams();
         formData.append("Nama_Pasien", document.getElementById("Nama_Pasien").value);
         formData.append("No_RM", document.getElementById("No_RM").value);
-        formData.append("Ruangan", document.getElementById("ruangan").value); // BARIS BARU DITAMBAHKAN
+        formData.append("Ruangan", document.getElementById("ruangan").value); 
         formData.append("Nama_DPJP", document.getElementById("Nama_DPJP").value);
         formData.append("Diagnosa", document.getElementById("Diagnosa").value);
         formData.append("Antibiotik", document.getElementById("Antibiotik").value);
@@ -359,7 +350,7 @@
           alert("Pemberitahuan: Permintaan resep antibiotik reserve berhasil dikirim ke Dasbor Tim PGA.");
           document.getElementById("ppraForm").reset();
           resetTombolKirim();
-          setTimeout(muatStatus, 2000); // Tunggu 2 detik lalu refresh tabel otomatis
+          setTimeout(muatStatus, 2000); 
         })
         .catch(error => {
           console.error("Error:", error);
@@ -394,13 +385,10 @@
       btn.disabled = false;
     }
 
-    // ---------------------------------------------------------
-    // FUNGSI 2: MEMUAT DATA KE DALAM TABEL STATUS
-    // ---------------------------------------------------------
     function muatStatus() {
       const tbody = document.getElementById("tabelStatus");
-      // colspan diubah dari 6 menjadi 7 agar rapi
-      tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 24px; color: var(--primary);"><i class="fa-solid fa-spinner fa-spin"></i> Sedang memuat data antrean terbaru...</td></tr>';
+      // colspan disesuaikan menjadi 8 karena ada tambahan kolom Alasan
+      tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 24px; color: var(--primary);"><i class="fa-solid fa-spinner fa-spin"></i> Sedang memuat data antrean terbaru...</td></tr>';
 
       fetch(WEB_APP_URL)
         .then(response => response.json())
@@ -408,8 +396,7 @@
           tbody.innerHTML = "";
           
           if(data.length === 0) {
-            // colspan diubah dari 6 menjadi 7 agar rapi
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 24px; color: var(--text-muted);">Belum ada antrean permintaan antibiotik reserve saat ini.</td></tr>';
+            tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 24px; color: var(--text-muted);">Belum ada antrean permintaan antibiotik reserve saat ini.</td></tr>';
             return;
           }
           
@@ -439,26 +426,25 @@
                   <span style="font-size: 12px; color: #0056b3;">DPJP: <strong>${row.Nama_DPJP || "-"}</strong></span>
                 </td>
                 <td>${row.Diagnosa || "-"}</td>
-                <td><span style="font-weight: bold; color: var(--primary);">${row.Ruangan || "-"}</span></td> <!-- BARIS BARU DITAMBAHKAN -->
+                <td><span style="font-weight: bold; color: var(--primary);">${row.Ruangan || "-"}</span></td>
                 <td>
                   <strong>${row.Antibiotik || "-"}</strong><br>
                   <span style="font-size: 12px; color: var(--text-muted);">${row.Regimen_Dosis || "-"}</span>
                 </td>
                 <td>${row.Indikasi || "-"}</td>
+                <td>${row.Alasan || "-"}</td> <!-- DATA ALASAN DITAMPILKAN -->
                 <td><span class="badge ${badgeClass}">${statusTeks}</span></td>
-                <td style="font-size: 13px;">${catatan}</td>
+                <td style="font-size: 12px;">${catatan}</td>
               </tr>
             `;
           }
         })
         .catch(error => {
           console.error("Error Fetch:", error);
-          // colspan diubah dari 6 menjadi 7 agar rapi
-          tbody.innerHTML = '<tr><td colspan="7" style="text-align:center; padding: 24px; color: var(--danger);"><i class="fa-solid fa-triangle-exclamation"></i> Gagal memuat data antrean. Pastikan URL Web App valid.</td></tr>';
+          tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 24px; color: var(--danger);"><i class="fa-solid fa-triangle-exclamation"></i> Gagal memuat data antrean. Pastikan URL Web App valid.</td></tr>';
         });
     }
 
-    // Panggil fungsi muat tabel otomatis saat web pertama kali dibuka
     window.addEventListener('DOMContentLoaded', muatStatus);
   </script>
 

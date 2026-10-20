@@ -9,7 +9,7 @@
   
   <style>
     :root {
-      --primary: #0056b3;      
+      --primary: #0056b3;     
       --primary-hover: #004494;
       --secondary: #0d6efd;    
       --bg-color: #e6f2ff;     
@@ -43,13 +43,29 @@
       padding: 25px 20px;
       text-align: center;
     }
+
+    /* Styling Tambahan untuk Header RSUD */
+    .hospital-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #ffcc00; /* Warna kuning emas sesuai gambar */
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      letter-spacing: 0.5px;
+    }
+
     .header-banner h2 {
       margin: 0;
-      font-size: 24px;
+      font-size: 22px;
       color: white;
+      font-weight: 700;
     }
+
     .header-banner p {
-      margin: 5px 0 0 0;
+      margin: 6px 0 0 0;
       font-size: 14px;
       color: #cce5ff;
     }
@@ -205,6 +221,10 @@
 
   <div class="container">
     <div class="header-banner">
+      <div class="hospital-title">
+        <i class="fa-solid fa-hospital"></i>
+        <span>RSUD dr. H. Soemarno Sosroatmodjo Kuala Kapuas</span>
+      </div>
       <h2>Formulir Permintaan Antibiotik Reserve</h2>
       <p>Program Pengendalian Resistensi Antimikroba (PPRA)</p>
     </div>
@@ -298,7 +318,7 @@
               <th>Ruangan</th>
               <th>Antibiotik / Dosis</th>
               <th>Indikasi</th>
-              <th>Alasan</th> <!-- HEADER ALASAN DITAMBAHKAN -->
+              <th>Alasan</th>
               <th>Status</th>
               <th>Catatan PGA</th>
             </tr>
@@ -312,7 +332,6 @@
   </div>
 
   <script>
-    // ⚠️ JANGAN LUPA UPDATE URL INI JIKA ANDA MELAKUKAN "NEW DEPLOYMENT" DI APPS SCRIPT
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbz6RBU2k6qLmHvOLNa6KWJz4cugWRoAjJb-jmuqvrSp4QFr97bs4XUA1TYh0ZSI5Wqz/exec"; 
 
     document.getElementById("ppraForm").addEventListener("submit", function(e) {
@@ -387,7 +406,6 @@
 
     function muatStatus() {
       const tbody = document.getElementById("tabelStatus");
-      // colspan disesuaikan menjadi 8 karena ada tambahan kolom Alasan
       tbody.innerHTML = '<tr><td colspan="8" style="text-align:center; padding: 24px; color: var(--primary);"><i class="fa-solid fa-spinner fa-spin"></i> Sedang memuat data antrean terbaru...</td></tr>';
 
       fetch(WEB_APP_URL)
@@ -432,7 +450,7 @@
                   <span style="font-size: 12px; color: var(--text-muted);">${row.Regimen_Dosis || "-"}</span>
                 </td>
                 <td>${row.Indikasi || "-"}</td>
-                <td>${row.Alasan || "-"}</td> <!-- DATA ALASAN DITAMPILKAN -->
+                <td>${row.Alasan || "-"}</td>
                 <td><span class="badge ${badgeClass}">${statusTeks}</span></td>
                 <td style="font-size: 12px;">${catatan}</td>
               </tr>
